@@ -26,6 +26,10 @@
       border-radius: 10px;
       margin: 10px;
       display: inline-block;
+      transition: background 0.3s;
+    }
+    .button:hover {
+      background: #45a049;
     }
     .button:disabled {
       background: gray;
@@ -77,12 +81,13 @@
 <div id="lightCount">Lights: 0</div>
 
 <!-- Tombol Upgrade -->
-<button class="button" id="upgradeFactoryButton" onclick="upgradeFactory()">Upgrade Factory (+8 Light/sec) [Cost: 50]</button>
-<button class="button" id="upgradeGeneratorButton" onclick="upgradeLightsGenerator()">Upgrade Lights Generator (+50 Light/sec) [Cost: 200]</button>
+<button class="button" id="upgradeFactoryButton" onclick="upgradeFactory()">Upgrade Factory (+1 Light/sec) [Cost: 50]</button>
+<button class="button" id="upgradeGeneratorButton" onclick="upgradeLightsGenerator()">Upgrade Lights Generator (+5 Light/sec) [Cost: 200]</button>
 
-<!-- Tombol Reset -->
+<!-- Tombol Reset dan Pause/Play -->
 <br><br>
 <button class="button" style="background: red;" onclick="resetGame()">Reset Game</button>
+<button class="button" id="pausePlayButton" onclick="togglePause()">⏸️ Pause</button>
 
 <!-- Progress Building -->
 <div class="building">
@@ -98,11 +103,12 @@
 <script>
   // Data utama
   let lights = parseFloat(localStorage.getItem('lights')) || 0;
-  let lightPerSecond = parseFloat(localStorage.getItem('lightPerSecond')) || 8;
+  let lightPerSecond = parseFloat(localStorage.getItem('lightPerSecond')) || 5;
   let upgradeCost = parseFloat(localStorage.getItem('upgradeCost')) || 50;
   let lightsGeneratorCost = parseFloat(localStorage.getItem('lightsGeneratorCost')) || 200;
   let buildingProgress = parseFloat(localStorage.getItem('buildingProgress')) || 0;
   let currentBuildingIndex = parseInt(localStorage.getItem('currentBuildingIndex')) || 0;
+  let paused = false; // Status pause/play
 
   // Daftar nama bangunan
   const buildingNames = [
@@ -133,24 +139,24 @@
     document.getElementById('upgradeGeneratorButton').disabled = lights < lightsGeneratorCost;
   }
 
-  // Upgrade Factory (+8 light/sec)
+  // Upgrade Factory (+1 light/sec)
   function upgradeFactory() {
     if (lights >= upgradeCost) {
       lights -= upgradeCost;
-      lightPerSecond += 8;
-      upgradeCost = Math.floor(upgradeCost * 2.5);
-      document.getElementById('upgradeFactoryButton').innerText = `Upgrade Factory (+8 Light/sec) [Cost: ${upgradeCost}]`;
+      lightPerSecond += 1;
+      upgradeCost = Math.floor(upgradeCost * 1.5);
+      document.getElementById('upgradeFactoryButton').innerText = `Upgrade Factory (+1 Light/sec) [Cost: ${upgradeCost}]`;
       saveProgress();
     }
   }
 
-  // Upgrade Lights Generator (+50 light/sec)
+  // Upgrade Lights Generator (+5 light/sec)
   function upgradeLightsGenerator() {
     if (lights >= lightsGeneratorCost) {
       lights -= lightsGeneratorCost;
-      lightPerSecond += 50;
-      lightsGeneratorCost = Math.floor(lightsGeneratorCost * 2.5);
-      document.getElementById('upgradeGeneratorButton').innerText = `Upgrade Lights Generator (+50 Light/sec) [Cost: ${lightsGeneratorCost}]`;
+      lightPerSecond += 5;
+      lightsGeneratorCost = Math.floor(lightsGeneratorCost * 1.5);
+      document.getElementById('upgradeGeneratorButton').innerText = `Upgrade Lights Generator (+5 Light/sec) [Cost: ${lightsGeneratorCost}]`;
       saveProgress();
     }
   }
@@ -159,7 +165,6 @@
   function showCompletionEffect() {
     const effect = document.getElementById('completionEffect');
     effect.style.display = 'block';
-
     setTimeout(() => {
       effect.style.display = 'none';
     }, 2000);
@@ -170,14 +175,16 @@
     if (confirm("Are you sure you want to reset the game? All progress will be lost!")) {
       localStorage.clear();
       lights = 0;
-      lightPerSecond = 5;
+      lightPerSecond = 1;
       upgradeCost = 50;
       lightsGeneratorCost = 200;
       buildingProgress = 0;
       currentBuildingIndex = 0;
+      paused = false;
 
-      document.getElementById('upgradeFactoryButton').innerText = `Upgrade Factory (+8 Light/sec) [Cost: ${upgradeCost}]`;
-      document.getElementById('upgradeGeneratorButton').innerText = `Upgrade Lights Generator (+50 Light/sec) [Cost: ${lightsGeneratorCost}]`;
+      document.getElementById('upgradeFactoryButton').innerText = `Upgrade Factory (+1 Light/sec) [Cost: ${upgradeCost}]`;
+      document.getElementById('upgradeGeneratorButton').innerText = `Upgrade Lights Generator (+5 Light/sec) [Cost: ${lightsGeneratorCost}]`;
+      document.getElementById('pausePlayButton').innerText = "⏸️ Pause";
 
       saveProgress();
       updateUI();
@@ -185,22 +192,30 @@
     }
   }
 
+  // Pause atau Play game
+  function togglePause() {
+    paused = !paused;
+    document.getElementById('pausePlayButton').innerText = paused ? "▶️ Play" : "⏸️ Pause";
+  }
+
   // Game Loop utama
   function gameLoop() {
-    lights += lightPerSecond / 10;
+    if (!paused) {
+      lights += lightPerSecond / 10;
 
-    if (buildingProgress < 100) {
-      buildingProgress += 0.1;
-    } else {
-      if (currentBuildingIndex < buildingNames.length - 1) {
-        currentBuildingIndex++;
-        buildingProgress = 0;
-        showCompletionEffect();
+      if (buildingProgress < 100) {
+        buildingProgress += 0.1;
+      } else {
+        if (currentBuildingIndex < buildingNames.length - 1) {
+          currentBuildingIndex++;
+          buildingProgress = 0;
+          showCompletionEffect();
+        }
       }
-    }
 
-    saveProgress();
-    updateUI();
+      saveProgress();
+      updateUI();
+    }
   }
 
   // Mulai loop
