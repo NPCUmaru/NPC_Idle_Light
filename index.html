@@ -77,7 +77,7 @@
 <div id="lightCount">Lights: 0</div>
 
 <!-- Tombol Upgrade -->
-<button class="button" id="upgradeFactoryButton" onclick="upgradeFactory()">Upgrade Factory (+1 Light/sec) [Cost: 50]</button>
+<button class="button" id="upgradeFactoryButton" onclick="upgradeFactory()">Upgrade Factory (+8 Light/sec) [Cost: 50]</button>
 <button class="button" id="upgradeGeneratorButton" onclick="upgradeLightsGenerator()">Upgrade Lights Generator (+50 Light/sec) [Cost: 200]</button>
 
 <!-- Tombol Reset -->
@@ -133,13 +133,13 @@
     document.getElementById('upgradeGeneratorButton').disabled = lights < lightsGeneratorCost;
   }
 
-  // Upgrade Factory (+1 light/sec)
+  // Upgrade Factory (+8 light/sec)
   function upgradeFactory() {
     if (lights >= upgradeCost) {
       lights -= upgradeCost;
-      lightPerSecond += 1;
+      lightPerSecond += 8;
       upgradeCost = Math.floor(upgradeCost * 1.5);
-      document.getElementById('upgradeFactoryButton').innerText = `Upgrade Factory (+1 Light/sec) [Cost: ${upgradeCost}]`;
+      document.getElementById('upgradeFactoryButton').innerText = `Upgrade Factory (+8 Light/sec) [Cost: ${upgradeCost}]`;
       saveProgress();
     }
   }
@@ -148,7 +148,7 @@
   function upgradeLightsGenerator() {
     if (lights >= lightsGeneratorCost) {
       lights -= lightsGeneratorCost;
-      lightPerSecond += 5;
+      lightPerSecond += 50;
       lightsGeneratorCost = Math.floor(lightsGeneratorCost * 1.5);
       document.getElementById('upgradeGeneratorButton').innerText = `Upgrade Lights Generator (+50 Light/sec) [Cost: ${lightsGeneratorCost}]`;
       saveProgress();
@@ -170,13 +170,13 @@
     if (confirm("Are you sure you want to reset the game? All progress will be lost!")) {
       localStorage.clear();
       lights = 0;
-      lightPerSecond = 1;
+      lightPerSecond = 5;
       upgradeCost = 50;
       lightsGeneratorCost = 200;
       buildingProgress = 0;
       currentBuildingIndex = 0;
 
-      document.getElementById('upgradeFactoryButton').innerText = `Upgrade Factory (+1 Light/sec) [Cost: ${upgradeCost}]`;
+      document.getElementById('upgradeFactoryButton').innerText = `Upgrade Factory (+8 Light/sec) [Cost: ${upgradeCost}]`;
       document.getElementById('upgradeGeneratorButton').innerText = `Upgrade Lights Generator (+50 Light/sec) [Cost: ${lightsGeneratorCost}]`;
 
       saveProgress();
