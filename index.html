@@ -51,6 +51,11 @@
   </style>
 </head>
 <body>
+
+<h1>Idle Light City Mini</h1>
+<div id="lightCount">Lights: 0</div>
+
+<!-- Upgrade Buttons -->
 <!-- Bagian <body> -->
 <div class="building">
   <h2 id="buildingName">Building 1</h2>
@@ -58,6 +63,30 @@
     <div class="progress-fill" id="buildingProgress"></div>
   </div>
 </div>
+<div id="completionEffect" style="
+  display: none;
+  position: fixed;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255, 255, 0, 0.8);
+  color: black;
+  padding: 20px 40px;
+  font-size: 2em;
+  border-radius: 20px;
+  box-shadow: 0 0 20px yellow;
+  animation: pop 0.5s ease;
+">
+  Building Completed!
+</div>
+
+<style>
+@keyframes pop {
+  0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+  50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+}
+</style>
 
 <script>
   let lights = parseFloat(localStorage.getItem('lights')) || 0;
@@ -124,6 +153,9 @@
       if (currentBuildingIndex < buildingNames.length - 1) {
         currentBuildingIndex++;  // Lanjut ke building berikutnya
         buildingProgress = 0;    // Reset progress untuk building baru
+        // Munculkan efek spesial
+        showCompletionEffect();
+        
       }
     }
 
@@ -133,6 +165,17 @@
 
   setInterval(gameLoop, 100);
   updateUI();
+  function showCompletionEffect() {
+  const effect = document.getElementById('completionEffect');
+  effect.style.display = 'block';
+
+  // Sembunyikan lagi setelah 2 detik
+  setTimeout(() => {
+    effect.style.display = 'none';
+  }, 2000);
+}
+
 </script>
+
 </body>
 </html>
