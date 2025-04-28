@@ -78,7 +78,7 @@
 
 <!-- Tombol Upgrade -->
 <button class="button" id="upgradeFactoryButton" onclick="upgradeFactory()">Upgrade Factory (+1 Light/sec) [Cost: 50]</button>
-<button class="button" id="upgradeGeneratorButton" onclick="upgradeLightsGenerator()">Upgrade Lights Generator (+5 Light/sec) [Cost: 200]</button>
+<button class="button" id="upgradeGeneratorButton" onclick="upgradeLightsGenerator()">Upgrade Lights Generator (+50 Light/sec) [Cost: 200]</button>
 
 <!-- Tombol Reset -->
 <br><br>
@@ -144,13 +144,13 @@
     }
   }
 
-  // Upgrade Lights Generator (+5 light/sec)
+  // Upgrade Lights Generator (+50 light/sec)
   function upgradeLightsGenerator() {
     if (lights >= lightsGeneratorCost) {
       lights -= lightsGeneratorCost;
       lightPerSecond += 5;
       lightsGeneratorCost = Math.floor(lightsGeneratorCost * 1.5);
-      document.getElementById('upgradeGeneratorButton').innerText = `Upgrade Lights Generator (+5 Light/sec) [Cost: ${lightsGeneratorCost}]`;
+      document.getElementById('upgradeGeneratorButton').innerText = `Upgrade Lights Generator (+50 Light/sec) [Cost: ${lightsGeneratorCost}]`;
       saveProgress();
     }
   }
@@ -177,7 +177,7 @@
       currentBuildingIndex = 0;
 
       document.getElementById('upgradeFactoryButton').innerText = `Upgrade Factory (+1 Light/sec) [Cost: ${upgradeCost}]`;
-      document.getElementById('upgradeGeneratorButton').innerText = `Upgrade Lights Generator (+5 Light/sec) [Cost: ${lightsGeneratorCost}]`;
+      document.getElementById('upgradeGeneratorButton').innerText = `Upgrade Lights Generator (+50 Light/sec) [Cost: ${lightsGeneratorCost}]`;
 
       saveProgress();
       updateUI();
