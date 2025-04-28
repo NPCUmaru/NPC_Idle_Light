@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Idle Light City Mini</title>
+  <title>NPC Idle Light Mini</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -48,47 +48,51 @@
       background: yellow;
       transition: width 0.5s;
     }
+    /* Efek Spesial */
+    #completionEffect {
+      display: none;
+      position: fixed;
+      top: 30%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(255, 255, 0, 0.8);
+      color: black;
+      padding: 20px 40px;
+      font-size: 2em;
+      border-radius: 20px;
+      box-shadow: 0 0 20px yellow;
+      animation: pop 0.5s ease;
+      z-index: 9999;
+    }
+    @keyframes pop {
+      0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+      50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+      100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    }
   </style>
 </head>
 <body>
 
-<h1>Idle Light City Mini</h1>
+<h1>NPC Idle Light Mini</h1>
 <div id="lightCount">Lights: 0</div>
 
-<!-- Upgrade Buttons -->
-<!-- Bagian <body> -->
+<!-- Tombol Upgrade -->
+<button class="button" id="upgradeFactoryButton" onclick="upgradeFactory()">Upgrade Factory (+1 Light/sec) [Cost: 50]</button>
+<button class="button" id="upgradeGeneratorButton" onclick="upgradeLightsGenerator()">Upgrade Lights Generator (+5 Light/sec) [Cost: 200]</button>
+
+<!-- Progress Building -->
 <div class="building">
   <h2 id="buildingName">Building 1</h2>
   <div class="progress-bar">
     <div class="progress-fill" id="buildingProgress"></div>
   </div>
 </div>
-<div id="completionEffect" style="
-  display: none;
-  position: fixed;
-  top: 30%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: rgba(255, 255, 0, 0.8);
-  color: black;
-  padding: 20px 40px;
-  font-size: 2em;
-  border-radius: 20px;
-  box-shadow: 0 0 20px yellow;
-  animation: pop 0.5s ease;
-">
-  Building Completed!
-</div>
 
-<style>
-@keyframes pop {
-  0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
-  50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
-  100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-}
-</style>
+<!-- Efek Spesial -->
+<div id="completionEffect">Building Completed!</div>
 
 <script>
+  // Data utama
   let lights = parseFloat(localStorage.getItem('lights')) || 0;
   let lightPerSecond = parseFloat(localStorage.getItem('lightPerSecond')) || 1;
   let upgradeCost = parseFloat(localStorage.getItem('upgradeCost')) || 50;
@@ -96,7 +100,7 @@
   let buildingProgress = parseFloat(localStorage.getItem('buildingProgress')) || 0;
   let currentBuildingIndex = parseInt(localStorage.getItem('currentBuildingIndex')) || 0;
 
-  // Daftar nama building
+  // Daftar nama bangunan
   const buildingNames = [
     "Building 1",
     "Building 2",
@@ -105,6 +109,7 @@
     "Building 5"
   ];
 
+  // Simpan data ke localStorage
   function saveProgress() {
     localStorage.setItem('lights', lights);
     localStorage.setItem('lightPerSecond', lightPerSecond);
@@ -114,6 +119,7 @@
     localStorage.setItem('currentBuildingIndex', currentBuildingIndex);
   }
 
+  // Update tampilan
   function updateUI() {
     document.getElementById('lightCount').innerText = `Lights: ${Math.floor(lights)}`;
     document.getElementById('buildingProgress').style.width = `${buildingProgress}%`;
@@ -123,6 +129,7 @@
     document.getElementById('upgradeGeneratorButton').disabled = lights < lightsGeneratorCost;
   }
 
+  // Upgrade Factory (+1 light/sec)
   function upgradeFactory() {
     if (lights >= upgradeCost) {
       lights -= upgradeCost;
@@ -133,6 +140,7 @@
     }
   }
 
+  // Upgrade Lights Generator (+5 light/sec)
   function upgradeLightsGenerator() {
     if (lights >= lightsGeneratorCost) {
       lights -= lightsGeneratorCost;
@@ -143,19 +151,27 @@
     }
   }
 
+  // Efek spesial saat building selesai
+  function showCompletionEffect() {
+    const effect = document.getElementById('completionEffect');
+    effect.style.display = 'block';
+
+    setTimeout(() => {
+      effect.style.display = 'none';
+    }, 2000);
+  }
+
+  // Game Loop utama
   function gameLoop() {
     lights += lightPerSecond / 10;
 
     if (buildingProgress < 100) {
-      buildingProgress += 0.1; // Tambah progress
+      buildingProgress += 0.1;
     } else {
-      // Kalau progress building sudah 100%
       if (currentBuildingIndex < buildingNames.length - 1) {
-        currentBuildingIndex++;  // Lanjut ke building berikutnya
-        buildingProgress = 0;    // Reset progress untuk building baru
-        // Munculkan efek spesial
+        currentBuildingIndex++;
+        buildingProgress = 0;
         showCompletionEffect();
-        
       }
     }
 
@@ -163,18 +179,9 @@
     updateUI();
   }
 
+  // Mulai loop
   setInterval(gameLoop, 100);
   updateUI();
-  function showCompletionEffect() {
-  const effect = document.getElementById('completionEffect');
-  effect.style.display = 'block';
-
-  // Sembunyikan lagi setelah 2 detik
-  setTimeout(() => {
-    effect.style.display = 'none';
-  }, 2000);
-}
-
 </script>
 
 </body>
