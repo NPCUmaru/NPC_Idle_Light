@@ -65,46 +65,61 @@
 </div>
 
 <script>
-  let lights = 0;
-  let lightPerSecond = 1;
-  let upgradeCost = 50;
-  let buildingProgress = 0;
+  // Mengambil data dari localStorage atau set default jika belum ada
+  let lights = parseFloat(localStorage.getItem('lights')) || 0;
+  let lightPerSecond = parseFloat(localStorage.getItem('lightPerSecond')) || 1;
+  let upgradeCost = parseFloat(localStorage.getItem('upgradeCost')) || 50;
+  let buildingProgress = parseFloat(localStorage.getItem('buildingProgress')) || 0;
 
-  // Update UI function to display changes
+  // Menyimpan data ke localStorage
+  function saveProgress() {
+    localStorage.setItem('lights', lights);
+    localStorage.setItem('lightPerSecond', lightPerSecond);
+    localStorage.setItem('upgradeCost', upgradeCost);
+    localStorage.setItem('buildingProgress', buildingProgress);
+  }
+
+  // Update UI
   function updateUI() {
     document.getElementById('lightCount').innerText = `Lights: ${Math.floor(lights)}`;
     document.getElementById('buildingProgress').style.width = `${buildingProgress}%`;
 
-    // Disable the upgrade button if not enough lights
     const upgradeButton = document.getElementById('upgradeButton');
     if (lights >= upgradeCost) {
-      upgradeButton.disabled = false;
+      upgradeButton.disabled = false;  // Button is enabled when enough lights
     } else {
-      upgradeButton.disabled = true;
+      upgradeButton.disabled = true;   // Button is disabled if not enough lights
     }
   }
 
-  // Function to handle the factory upgrade
+  // Fungsi upgrade factory
   function upgradeFactory() {
     if (lights >= upgradeCost) {
       lights -= upgradeCost;
       lightPerSecond += 1;
       upgradeCost = Math.floor(upgradeCost * 1.5);
       document.querySelector('button').innerText = `Upgrade Factory (+1 Light/sec) [Cost: ${upgradeCost}]`;
+
+      // Setelah upgrade, simpan progresnya
+      saveProgress();
     }
   }
 
-  // Game loop function
+  // Game loop untuk update setiap 100ms
   function gameLoop() {
-    lights += lightPerSecond / 10; // Update every 100ms
+    lights += lightPerSecond / 10;  // Update lights setiap 100ms
     if (lights >= 100 && buildingProgress < 100) {
       buildingProgress += 1;
     }
+    saveProgress();  // Menyimpan progres tiap game loop
     updateUI();
   }
 
-  // Start the game loop
+  // Mulai game loop setiap 100ms
   setInterval(gameLoop, 100);
+
+  // Update UI awal saat halaman pertama kali dimuat
+  updateUI();
 </script>
 
 </body>
