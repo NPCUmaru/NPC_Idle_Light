@@ -1,3 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Idle Light City Mini</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #1e1e1e;
+      color: #ffffff;
+      text-align: center;
+      padding: 30px;
+    }
+    #lightCount {
+      font-size: 2em;
+      margin-bottom: 20px;
+    }
+    .button {
+      background: #4CAF50;
+      border: none;
+      padding: 15px 30px;
+      color: white;
+      font-size: 1em;
+      cursor: pointer;
+      border-radius: 10px;
+      margin: 10px;
+      display: inline-block;
+    }
+    .button:disabled {
+      background: gray;
+      cursor: not-allowed;
+    }
+    .building {
+      margin-top: 40px;
+    }
+    .progress-bar {
+      width: 300px;
+      height: 30px;
+      background: #333;
+      border-radius: 15px;
+      overflow: hidden;
+      margin: 20px auto;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: yellow;
+      transition: width 0.5s;
+    }
+  </style>
+</head>
+<body>
 <!-- Bagian <body> -->
 <div class="building">
   <h2 id="buildingName">Building 1</h2>
@@ -81,3 +134,5 @@
   setInterval(gameLoop, 100);
   updateUI();
 </script>
+</body>
+</html>
