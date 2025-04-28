@@ -144,7 +144,7 @@
     if (lights >= upgradeCost) {
       lights -= upgradeCost;
       lightPerSecond += 1;
-      upgradeCost = Math.floor(upgradeCost * 1.5);
+      upgradeCost = Math.floor(upgradeCost * 2.5);
       document.getElementById('upgradeFactoryButton').innerText = `Upgrade Factory (+1 Light/sec) [Cost: ${upgradeCost}]`;
       saveProgress();
     }
@@ -175,7 +175,7 @@
     if (confirm("Are you sure you want to reset the game? All progress will be lost!")) {
       localStorage.clear();
       lights = 0;
-      lightPerSecond = 1;
+      lightPerSecond = 5;
       upgradeCost = 50;
       lightsGeneratorCost = 200;
       buildingProgress = 0;
