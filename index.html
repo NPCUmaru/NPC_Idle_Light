@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Idle Light City Mini</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #1e1e1e;
+      color: #ffffff;
+      text-align: center;
+      padding: 30px;
+    }
+    #lightCount {
+      font-size: 2em;
+      margin-bottom: 20px;
+    }
+    .button {
+      background: #4CAF50;
+      border: none;
+      padding: 15px 30px;
+      color: white;
+      font-size: 1em;
+      cursor: pointer;
+      border-radius: 10px;
+      margin: 10px;
+    }
+    .building {
+      margin-top: 40px;
+    }
+    .progress-bar {
+      width: 300px;
+      height: 30px;
+      background: #333;
+      border-radius: 15px;
+      overflow: hidden;
+      margin: 20px auto;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: yellow;
+      transition: width 0.5s;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Idle Light City Mini</h1>
+<div id="lightCount">Lights: 0</div>
+
+<button class="button" onclick="upgradeFactory()">
+  Upgrade Factory (+1 Light/sec) [Cost: 50]
+</button>
+
+<div class="building">
+  <h2>Building 1</h2>
+  <div class="progress-bar">
+    <div class="progress-fill" id="buildingProgress"></div>
+  </div>
+</div>
+
+<script>
+  let lights = 0;
+  let lightPerSecond = 1;
+  let upgradeCost = 50;
+  let buildingProgress = 0;
+
+  function updateUI() {
+    document.getElementById('lightCount').innerText = `Lights: ${Math.floor(lights)}`;
+    document.getElementById('buildingProgress').style.width = `${buildingProgress}%`;
+  }
+
+  function upgradeFactory() {
+    if (lights >= upgradeCost) {
+      lights -= upgradeCost;
+      lightPerSecond += 1;
+      upgradeCost = Math.floor(upgradeCost * 1.5);
+      document.querySelector('button').innerText = `Upgrade Factory (+1 Light/sec) [Cost: ${upgradeCost}]`;
+    }
+  }
+
+  function gameLoop() {
+    lights += lightPerSecond / 10; // Update setiap 100ms
+    if (lights >= 100 && buildingProgress < 100) {
+      buildingProgress += 1;
+    }
+    updateUI();
+  }
+
+  setInterval(gameLoop, 100); // 100ms = 0.1 detik
+</script>
+
+</body>
+</html>
