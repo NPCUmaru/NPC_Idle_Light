@@ -96,7 +96,7 @@
   function upgradeFactory() {
     if (lights >= upgradeCost) {
       lights -= upgradeCost;
-      lightPerSecond += 1;
+      lightPerSecond += 10;
       upgradeCost = Math.floor(upgradeCost * 1.5);
       document.querySelector('button').innerText = `Upgrade Factory (+1 Light/sec) [Cost: ${upgradeCost}]`;
 
