@@ -25,6 +25,11 @@
       cursor: pointer;
       border-radius: 10px;
       margin: 10px;
+      display: inline-block;
+    }
+    .button:disabled {
+      background: gray;
+      cursor: not-allowed;
     }
     .building {
       margin-top: 40px;
@@ -50,9 +55,7 @@
 <h1>Idle Light City Mini</h1>
 <div id="lightCount">Lights: 0</div>
 
-<button class="button" onclick="upgradeFactory()">
-  Upgrade Factory (+1 Light/sec) [Cost: 50]
-</button>
+<button class="button" id="upgradeButton" onclick="upgradeFactory()">Upgrade Factory (+1 Light/sec) [Cost: 50]</button>
 
 <div class="building">
   <h2>Building 1</h2>
@@ -67,11 +70,21 @@
   let upgradeCost = 50;
   let buildingProgress = 0;
 
+  // Update UI function to display changes
   function updateUI() {
     document.getElementById('lightCount').innerText = `Lights: ${Math.floor(lights)}`;
     document.getElementById('buildingProgress').style.width = `${buildingProgress}%`;
+
+    // Disable the upgrade button if not enough lights
+    const upgradeButton = document.getElementById('upgradeButton');
+    if (lights >= upgradeCost) {
+      upgradeButton.disabled = false;
+    } else {
+      upgradeButton.disabled = true;
+    }
   }
 
+  // Function to handle the factory upgrade
   function upgradeFactory() {
     if (lights >= upgradeCost) {
       lights -= upgradeCost;
@@ -81,15 +94,17 @@
     }
   }
 
+  // Game loop function
   function gameLoop() {
-    lights += lightPerSecond / 10; // Update setiap 100ms
+    lights += lightPerSecond / 10; // Update every 100ms
     if (lights >= 100 && buildingProgress < 100) {
       buildingProgress += 1;
     }
     updateUI();
   }
 
-  setInterval(gameLoop, 100); // 100ms = 0.1 detik
+  // Start the game loop
+  setInterval(gameLoop, 100);
 </script>
 
 </body>
