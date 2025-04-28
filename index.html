@@ -143,7 +143,7 @@
   function upgradeFactory() {
     if (lights >= upgradeCost) {
       lights -= upgradeCost;
-      lightPerSecond += 1;
+      lightPerSecond += 8;
       upgradeCost = Math.floor(upgradeCost * 2.5);
       document.getElementById('upgradeFactoryButton').innerText = `Upgrade Factory (+1 Light/sec) [Cost: ${upgradeCost}]`;
       saveProgress();
@@ -154,7 +154,7 @@
   function upgradeLightsGenerator() {
     if (lights >= lightsGeneratorCost) {
       lights -= lightsGeneratorCost;
-      lightPerSecond += 5;
+      lightPerSecond += 50;
       lightsGeneratorCost = Math.floor(lightsGeneratorCost * 1.5);
       document.getElementById('upgradeGeneratorButton').innerText = `Upgrade Lights Generator (+5 Light/sec) [Cost: ${lightsGeneratorCost}]`;
       saveProgress();
